@@ -7,5 +7,4 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()  # this connects to our Firestore database
 collection = db.collection('accounts')  # opens 'accounts' collection
-doc = collection.document('account')  # specifies the 'rome' document
-
+doc = collection.document('new_user')  # specifies the 'rome' document
