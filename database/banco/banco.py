@@ -1,4 +1,4 @@
-from main import db, collection
+from database.main import db, collection
 import json
 
 
@@ -7,9 +7,12 @@ class FireBaseMethods:
         self.firebase = _db
         self.collection = _collection
 
-    def read_by_document(self, _document: str, ):
-        doc = self.collection.document(_document).get()
-        return doc.to_dict()
+    def read(self, _document: str = None, ):
+        if _document:
+            data = self.collection.document(_document).get()
+            return data.to_dict()
+        all_data = [data.to_dict() for data in self.collection.stream()]
+        return all_data
 
     def read_by_field(self, _field: str, _field_value: str):
         docs = self.collection.where(_field, '==', _field_value).stream()
