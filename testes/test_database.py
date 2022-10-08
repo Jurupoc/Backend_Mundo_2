@@ -1,5 +1,5 @@
 import unittest
-from banco.banco import firebase_db
+from database.banco import firebase_db
 
 
 class TesteDbMethods(unittest.TestCase):

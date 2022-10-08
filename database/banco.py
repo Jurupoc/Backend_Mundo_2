@@ -21,6 +21,7 @@ class FireBaseMethods:
 
     def create(self, _document: str, data: dict, ):
         self.collection.document(_document).set(data)
+        return data
 
     def delete(self, _document: str, ):
         self.collection.document(_document).delete()
