@@ -8,7 +8,7 @@ class TesteDbMethods(unittest.TestCase):
         self.db = firebase_db
         self.test_user = {
             'email': 'test_user@email.com',
-            'id': '-1',
+            'id': 0,
             'idCliente': 0,
             'idPrestador': 0,
             'password': '123456'

@@ -16,7 +16,7 @@ class FirebaseServices:
         response['data'] = self.db.read_by_field('email', user_email)
 
         if not response['data']:
-            response['message'] = 'Usuário não Encontrado'
+            response['message'] = 'Credenciais incorretas'
 
         return response
 
@@ -29,29 +29,35 @@ class FirebaseServices:
 
         return response
 
-    def create_new_user(self, user_data: dict, ):
+    def create_new_user(self, user_data: dict, ) -> dict:
         response = dict()
         verificacao = self.db.read_by_field('email', user_data['email'])
         if not verificacao:
+            user_data['id'] = self.db.get_last_id() + 1
             response['data'] = self.db.create(user_data['email'], user_data)
+
             response['message'] = 'Usuário Criado'
             return response
 
         response['message'] = 'Usuário ja cadastrado'
         return response
 
-    def log_in(self, user_data: dict, ):
+    def log_in(self, user_data: dict, ) -> dict:
         response = dict()
         response['data'] = self.db.read_by_field('email', user_data['email'])
 
-        if response['data'] and response['data']['password'] == user_data['password']:
-            response['message'] = 'Login realizado'
+        if not response['data']:
+            response['message'] = 'Usuário não encontrado'
             return response
 
-        response['message'] = 'Usuário não encontrado'
+        if not response['data']['password'] == user_data['password']:
+            response['message'] = 'Credenciais incorretas'
+            return response
+
+        response['message'] = 'Login realizado'
         return response
 
-    def delete_user(self, user_email: str, ):
+    def delete_user(self, user_email: str, ) -> dict:
         response = dict()
         response['data'] = self.db.read(user_email)
 
@@ -62,7 +68,6 @@ class FirebaseServices:
 
         response['message'] = 'Usuário não encontrado'
         return response
-
 
 
 firebase_service_instance = FirebaseServices(firebase_db)

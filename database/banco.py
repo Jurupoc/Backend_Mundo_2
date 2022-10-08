@@ -1,5 +1,4 @@
 from database.main import db, collection
-import json
 
 
 class FireBaseMethods:
@@ -15,9 +14,12 @@ class FireBaseMethods:
         return all_data
 
     def read_by_field(self, _field: str, _field_value: str, ):
-        docs = self.collection.where(_field, '==', _field_value).stream()
-        data = [doc.to_dict() for doc in docs]
-        return data[0] if data else None
+        doc = self.collection.where(_field, '==', _field_value).limit_to_last(1).get()
+        return doc[0].to_dict() if doc else None
+
+    def get_last_id(self, ):
+        doc = self.collection.order_by("id").limit_to_last(1).get()
+        return doc[0].to_dict()['id'] if doc else 0
 
     def create(self, _document: str, data: dict, ):
         self.collection.document(_document).set(data)
