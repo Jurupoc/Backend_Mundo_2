@@ -14,9 +14,10 @@ class FireBaseMethods:
         all_data = [data.to_dict() for data in self.collection.stream()]
         return all_data
 
-    def read_by_field(self, _field: str, _field_value: str):
+    def read_by_field(self, _field: str, _field_value: str, ):
         docs = self.collection.where(_field, '==', _field_value).stream()
-        return [doc.to_dict() for doc in docs][0]
+        data = [doc.to_dict() for doc in docs]
+        return data[0] if data else None
 
     def create(self, _document: str, data: dict, ):
         self.collection.document(_document).set(data)
