@@ -11,18 +11,18 @@ class FirebaseServices:
         response['data'] = self.db.read()
         return response
 
-    def get_user_by_email(self, user_email: str, ) -> dict:
+    def get_user_by_email(self, user_data: dict, ) -> dict:
         response = dict()
-        response['data'] = self.db.read_by_field('email', user_email)
+        response['data'] = self.db.read_by_field('email', user_data['email'])
 
         if not response['data']:
-            response['message'] = 'Credenciais incorretas'
+            response['message'] = 'Usuário não encontrado'
 
         return response
 
-    def get_user_by_id(self, user_id: str, ) -> dict:
+    def get_user_by_id(self, user_data: dict, ) -> dict:
         response = dict()
-        response['data'] = self.db.read_by_field('id', user_id)
+        response['data'] = self.db.read_by_field('id', user_data['id'])
 
         if not response['data']:
             response['message'] = 'Usuário não Encontrado'
@@ -64,6 +64,18 @@ class FirebaseServices:
         if response['data']:
             self.db.delete(user_email)
             response['message'] = 'Usuário deletado'
+            return response
+
+        response['message'] = 'Usuário não encontrado'
+        return response
+
+    def reset_password(self, user_data: dict) -> dict:
+        response = dict()
+        response['data'] = self.db.read(user_data['email'])
+
+        if response['data']:
+            self.db.update(user_data['email'], 'password', user_data['new_password'])
+            response['message'] = 'Usuário atualizado'
             return response
 
         response['message'] = 'Usuário não encontrado'
