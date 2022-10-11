@@ -57,9 +57,9 @@ class FirebaseServices:
         response['message'] = 'Login realizado'
         return response
 
-    def delete_user(self, user_email: str, ) -> dict:
+    def delete_user(self, user_data: dict, ) -> dict:
         response = dict()
-        response['data'] = self.db.read(user_email)
+        response['data'] = self.db.read(user_data['email'])
 
         if response['data']:
             self.db.delete(user_email)
