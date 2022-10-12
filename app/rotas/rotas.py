@@ -21,3 +21,10 @@ def login():
     user_data = request.json
     message = firebase_service_instance.log_in(user_data)
     return jsonify(message)
+
+
+@app.route("/user/reset", methods=['GET'])
+def reset_password():
+    user_data = request.json
+    message = firebase_service_instance.reset_password(user_data)
+    return jsonify(message)
