@@ -18,8 +18,8 @@ class FireBaseMethods:
         return doc[0].to_dict() if doc else None
 
     def get_last_id(self, ):
-        doc = self.collection.order_by("id").limit_to_last(1).get()
-        return doc[0].to_dict()['id'] if doc else 0
+        doc = self.collection.order_by("id").get()
+        return doc[len(doc)-1].to_dict()['id'] if doc else 0
 
     def create(self, _document: str, data: dict, ):
         self.collection.document(_document).set(data)
