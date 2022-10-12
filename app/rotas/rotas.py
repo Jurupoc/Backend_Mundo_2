@@ -16,7 +16,7 @@ def get_all_users():
     return jsonify(data)
 
 
-@app.route("/user/login", methods=['GET'])
+@app.route("/user/login", methods=['POST'])
 def login():
     user_data = request.json
     message = firebase_service_instance.log_in(user_data)

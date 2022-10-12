@@ -134,6 +134,7 @@ venv.bak/
 # Spyder project settings
 .spyderproject
 .spyproject
+agendai-env/
 
 # Rope project settings
 .ropeproject
