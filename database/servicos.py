@@ -33,9 +33,11 @@ class FirebaseServices:
     def create_new_user(self, user_data: dict, ) -> dict:
         response = dict()
         verificacao = self.db.read_by_field('email', user_data['email'])
+
         if not verificacao:
             user_data['id'] = self.db.get_last_id() + 1
-            response['data'] = self.db.create(user_data['email'], user_data)
+            print(f'ID = {self.db.get_last_id()}')
+            response['data'] = self.db.create(user_data)
 
             response['message'] = 'Usuário Criado'
             return response
@@ -63,7 +65,7 @@ class FirebaseServices:
         response['data'] = self.db.read(user_data['email'])
 
         if response['data']:
-            self.db.delete(user_email)
+            self.db.delete(user_data)
             response['message'] = 'Usuário deletado'
             return response
 

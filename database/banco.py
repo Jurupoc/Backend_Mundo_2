@@ -19,14 +19,14 @@ class FireBaseMethods:
 
     def get_last_id(self, ):
         doc = self.collection.order_by("id").get()
-        return doc[len(doc)-1].to_dict()['id'] if doc else 0
+        return doc[-1].to_dict()['id'] if doc else 0
 
-    def create(self, _document: str, data: dict, ):
-        self.collection.document(_document).set(data)
-        return data
+    def create(self, _data: dict, ):
+        self.collection.document(_data["email"]).set(_data)
+        return _data
 
-    def delete(self, _document: str, ):
-        self.collection.document(_document).delete()
+    def delete(self, _data: dict, ):
+        self.collection.document(_data["email"]).delete()
 
     def update(self, _document: str, _field: str, _new_value: str):
         self.collection.document(_document).update({_field: _new_value})
