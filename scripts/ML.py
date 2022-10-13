@@ -1,31 +1,35 @@
-from unidecode import unidecode
-import json, re, nltk, string, num2words
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
+import num2words
+import re
+import string
 from decimal import DecimalException
-from nltk.stem import SnowballStemmer, WordNetLemmatizer
+
 import nltk
+from nltk.stem import SnowballStemmer, WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+from unidecode import unidecode
+
 nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 
+
 def get_tags(text) :
-    #processamento básico
+    # processamento básico
     text = text.lower()
     text = unidecode(text)
     text = re.sub(',|\.|/|$|\(|\)|-|\+|:|•', '', text)
 
-    #Remove espaços
+    # Remove espaços
     text = re.sub('\s+', ' ', text)
-    #remove remanescentes
+    # remove remanescentes
     text = ' '.join([word for word in word_tokenize(text) if not ( len(word)<2 and not word.isdigit() or "'" in word and len(word)<4)])
 
-    #remove simbolos
+    # remove simbolos
     symbols = string.punctuation
     for s in symbols:
         text = text.replace(s,'')
 
-    #substituindo números por dígitos
+    # substituindo números por dígitos
     text_temp = word_tokenize(text)
     for index, word in enumerate(text_temp):
         try:

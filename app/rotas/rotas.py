@@ -29,21 +29,21 @@ def reset_password():
     message = firebase_service_instance.reset_password(user_data)
     return jsonify(message)
 
+
 @app.route("/user/ml/infocliente", methods=['POST'])
 def descobrir_tags_do_cliente():
     user_data = request.json
 
     tags_cabelo = user_data['categorias']
+
     for text in user_data['cabelo']:
         tags_cabelo.extend(ML.get_tags(text).split())
 
-    tags_maquiagem = ML.get_tags(user_data['maquiagem']).split()
-    tags_interesse = ML.get_tags(user_data['interesse']).split()
-
     tags = []
-    tags.extend([x for x in tags_maquiagem])
-    tags.extend([x for x in tags_cabelo])
-    tags.extend([x for x in tags_interesse])
+
+    tags.extend(ML.get_tags(user_data['maquiagem']).split())
+    tags.extend(ML.get_tags(user_data['interesse']).split())
+    tags.extend(tags_cabelo)
 
     data = firebase_service_instance_cliente.create_new_user({"email" : user_data['email'], "tags" : tags})
 
