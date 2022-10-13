@@ -15,6 +15,12 @@ def get_all_users():
     data = firebase_service_instance.get_all_user()
     return jsonify(data)
 
+@app.route("/cliente", methods=['POST'])
+def get_cliente():
+    user_data = request.json
+    data = firebase_service_instance_cliente.get_user_by_email(user_data)
+    return jsonify(data)
+
 
 @app.route("/user/login", methods=['POST'])
 def login():

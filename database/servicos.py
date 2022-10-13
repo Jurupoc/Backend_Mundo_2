@@ -14,6 +14,7 @@ class FirebaseServices:
     def get_user_by_email(self, user_data: dict, ) -> dict:
         response = dict()
         response['data'] = self.db.read_by_field('email', user_data['email'])
+        response['message'] = 'Sucesso'
 
         if not response['data']:
             response['message'] = 'Usuário não encontrado'
