@@ -53,7 +53,8 @@ def descobrir_tags_do_cliente():
 @app.route("/user/ml/infoprestador", methods=['POST'])
 def descobrir_tags_do_prestador():
     user_data = request.json
-    tags_descricao = ML.get_tags(user_data['descricao']).split()
+    tags_descricao = user_data['categorias']
+    tags_descricao.extend(ML.get_tags(user_data['descricao']).split())
     data = firebase_service_instance_prestador.create_new_user({"email" : user_data['email'], "tags" : tags_descricao})
 
     return jsonify(data)
