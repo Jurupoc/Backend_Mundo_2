@@ -1,7 +1,7 @@
 from app import app
 from flask import jsonify, request
 from database.servicos import firebase_service_instance, firebase_service_instance_cliente, firebase_service_instance_prestador
-
+import scripts.ML as ML
 
 @app.route("/user", methods=['POST'])
 def create_user():
@@ -33,6 +33,16 @@ def reset_password():
 def descobrir_tags_do_cliente():
     user_data = request.json
 
-    # data = firebase_service_instance_prestador.create_new_user(user_data)
+    tags_cabelo = user_data['categorias']
+    for text in user_data['cabelo']:
+        tags_cabelo.extend(ML.get_tags(text).split())
 
-    return #jsonify(data)
+    tags_maquiagem = ML.get_tags(user_data['maquiagem']).split()
+    tags_interesse = ML.get_tags(user_data['interesse']).split()
+    
+    data = firebase_service_instance_cliente.create_new_user({"email" : user_data['email'], 
+                                                    "tags_cabelo" : tags_cabelo, 
+                                                    "tags_interesse" : tags_interesse, 
+                                                    "tags_maquiagem" : tags_maquiagem})
+
+    return jsonify(data)
