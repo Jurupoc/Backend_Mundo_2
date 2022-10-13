@@ -1,4 +1,4 @@
-from database.main import db, collection
+from database.main import db, collection, collection_cliente, collection_prestador
 
 
 class FireBaseMethods:
@@ -33,3 +33,5 @@ class FireBaseMethods:
 
 
 firebase_db = FireBaseMethods(db, collection)
+firebase_db_cliente = FireBaseMethods(db, collection_cliente)
+firebase_db_prestador = FireBaseMethods(db, collection_prestador)

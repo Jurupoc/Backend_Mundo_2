@@ -1,4 +1,4 @@
-from database.banco import firebase_db, FireBaseMethods
+from database.banco import firebase_db, FireBaseMethods, firebase_db_cliente, firebase_db_prestador
 
 
 class FirebaseServices:
@@ -83,3 +83,5 @@ class FirebaseServices:
 
 
 firebase_service_instance = FirebaseServices(firebase_db)
+firebase_service_instance_cliente = FirebaseServices(firebase_db_cliente)
+firebase_service_instance_prestador = FirebaseServices(firebase_db_prestador)
