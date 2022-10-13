@@ -29,7 +29,7 @@ def reset_password():
     message = firebase_service_instance.reset_password(user_data)
     return jsonify(message)
 
-@app.route("/user/ml/info", methods=['POST'])
+@app.route("/user/ml/infocliente", methods=['POST'])
 def descobrir_tags_do_cliente():
     user_data = request.json
 
@@ -39,10 +39,42 @@ def descobrir_tags_do_cliente():
 
     tags_maquiagem = ML.get_tags(user_data['maquiagem']).split()
     tags_interesse = ML.get_tags(user_data['interesse']).split()
-    
-    data = firebase_service_instance_cliente.create_new_user({"email" : user_data['email'], 
-                                                    "tags_cabelo" : tags_cabelo, 
-                                                    "tags_interesse" : tags_interesse, 
-                                                    "tags_maquiagem" : tags_maquiagem})
+
+    tags = []
+    tags.extend([x for x in tags_maquiagem])
+    tags.extend([x for x in tags_cabelo])
+    tags.extend([x for x in tags_interesse])
+
+    data = firebase_service_instance_cliente.create_new_user({"email" : user_data['email'], "tags" : tags})
 
     return jsonify(data)
+
+
+@app.route("/user/ml/infoprestador", methods=['POST'])
+def descobrir_tags_do_prestador():
+    user_data = request.json
+    tags_descricao = ML.get_tags(user_data['descricao']).split()
+    data = firebase_service_instance_prestador.create_new_user({"email" : user_data['email'], "tags" : tags_descricao})
+
+    return jsonify(data)
+
+
+@app.route("/user/ml/recomendacao", methods=['POST'])
+def get_recomendacao():
+    user_data = request.json
+    cliente = firebase_service_instance_cliente.get_user_by_email(user_data)
+    prestadores = firebase_service_instance_prestador.get_all_user()
+
+    recomendados = []
+    pontuacao = {}
+    for prestador in prestadores['data']:
+        pontos = 0
+        for tagc in cliente['data']['tags']:
+            if tagc in prestador['tags']:
+                pontos += 1
+        pontuacao[prestador['email']] = pontos
+
+    for email in sorted(pontuacao, reverse=True, key=pontuacao.get):
+        recomendados.extend([prestador for prestador in prestadores['data'] if prestador['email'] == email])
+
+    return jsonify(recomendados)

@@ -41,7 +41,7 @@ def get_tags(text) :
     text = ' '.join([lemmatizer.lemmatize(word) for word in word_tokenize(text)])
 
     #Aplicando o Stemmer
-    stemmer = SnowballStemmer('english')
+    stemmer = SnowballStemmer('portuguese')
     text = ' '.join([stemmer.stem(word) for word in word_tokenize(text)])
 
     return text
